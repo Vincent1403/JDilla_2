@@ -92,12 +92,30 @@ var swing = 1;
  
 swingText.innerHTML = "off"
 swingSlider.oninput = function() {
+  swing = parseFloat(swingSlider.value);
+ 
+  const thirdclasses = ["d3", "d7", "d11", "d15"];
+  const third = thirdclasses.flatMap(className => Array.from(document.getElementsByClassName(className)));
+    const fourthclasses = ["d4", "d8", "d12", "d16"];
+  const fourth = fourthclasses.flatMap(className => Array.from(document.getElementsByClassName(className)));
+ 
   if (this.value == 1) {
     swingText.innerHTML = "off"
+ 
+    for (var k = 0; k<4;k++) {
+      third[k].style.width="25%";
+      fourth[k].style.width="25%";
+    }
   } else {
     swingText.innerHTML = "1/"+this.value;
+ 
+    for (var k = 0; k<4;k++) {
+      third[k].style.width=50*Math.floor(swing/2)/swing+"%";
+      fourth[k].style.width=50*Math.ceil(swing/2)/swing+"%";
+      console.log(50*Math.floor(swing/2)/swing+"%");
+      console.log(50*Math.ceil(swing/2)/swing+"%");
+    }
   }
-  swing = parseFloat(swingSlider.value);
 }
  
 function playSound(audio) {
@@ -159,15 +177,15 @@ function loop() {
     j++;
     if (swing !== 1) {
         const halfSwing = 0.5*swing;
-        if (j === 1) {
-          interval = 2*T0 * Math.ceil(swing / 2) / swing / 1000;
-        } else {
+        if (j === 3) {
           interval = 2*T0 * Math.floor(swing/2)/swing / 1000;             
-          j = 0;
+        }
+        if (j === 4) {
+          interval = 2*T0 * Math.ceil(swing / 2) / swing / 1000;
         }
     }
-    if (j === 2) {
-      j = 0;
+    if (j === 4) {
+      j=0;
     }
  
     currentTime += interval;

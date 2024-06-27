@@ -1,208 +1,329 @@
-const rows = document.querySelector(".sequencer").children;
+@import url('https://fonts.cdnfonts.com/css/adam-warren-pro');
  
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-const kick = new Audio("https://raw.githubusercontent.com/kucerajacob/DRUM-SEQUENCER/master/audio/kick.mp3"),
-    clap = new Audio("https://raw.githubusercontent.com/kucerajacob/DRUM-SEQUENCER/master/audio/clap.mp3"),
-    hihat = new Audio("https://raw.githubusercontent.com/kucerajacob/DRUM-SEQUENCER/master/audio/hihat.mp3"),
-    rim = new Audio("https://raw.githubusercontent.com/kucerajacob/DRUM-SEQUENCER/master/audio/rim.mp3"),
-    Q = new Audio("https://raw.githubusercontent.com/kucerajacob/DRUM-SEQUENCER/master/audio/Q.mp3"),
-    W = new Audio("https://raw.githubusercontent.com/kucerajacob/DRUM-SEQUENCER/master/audio/W.mp3"),
-    E = new Audio("https://raw.githubusercontent.com/kucerajacob/DRUM-SEQUENCER/master/audio/E.mp3"),
-    R = new Audio("https://raw.githubusercontent.com/kucerajacob/DRUM-SEQUENCER/master/audio/R.mp3");
- 
-const item = document.querySelectorAll(".sample");
- 
-// Checkbox toggle functionality
-item.forEach(function (el) {
-    el.onclick = function () {
-        if (el.classList.contains("item-selected")) {
-            el.classList.remove("item-selected");
-        } else {
-            el.classList.add("item-selected");
-        }
-    }
-});
- 
-// Clear button functionality
-document.getElementById("clear-track").onclick = function () {
-    [].forEach.call(item, function (el) {
-        el.classList.remove("item-selected");
-    });
+* {
+	margin: 0;
+	padding: 0;
+	user-select: none;
 }
  
-// Sample pad key press functionality
-document.onkeydown = function (e) {
-    e = e || window.event;
- 
-    switch (e.key) {
-        case "q":
-            playSound(Q);
-            document.getElementById("sampler1").classList.add("pressed");
-            break;
-        case "w":
-            playSound(W);
-            document.getElementById("sampler2").classList.add("pressed");
-            break;
-        case "e":
-            playSound(E);
-            document.getElementById("sampler3").classList.add("pressed");
-            break;
-        case "r":
-            playSound(R);
-            document.getElementById("sampler4").classList.add("pressed");
-            break;    
-    }
+html {
+	font-family: 'Adam Warren pro', sans-serif;
+	background-color: transparent;
 }
  
-document.onkeyup = function (e) {
-    e = e || window.event;
+.container {
+	background-color: transparent;
+	/* box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.07); */
+	height: 550px;
+	width: 100%;
+	border-radius: 0px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	padding: 12px 20px;
+	display: flex;
+	border: 0px solid rgba(0, 0, 0, 0.2);
+  font-size: 18px;
  
-    switch (e.key) {
-        case "q":
-            document.getElementById("sampler1").classList.remove("pressed");
-            break;
-        case "w":
-            document.getElementById("sampler2").classList.remove("pressed");
-            break;
-        case "e":
-            document.getElementById("sampler3").classList.remove("pressed");
-            break;
-        case "r":
-            document.getElementById("sampler4").classList.remove("pressed");
-            break;    
-    }
+ 
+ 
 }
  
-// BPM slider
-const bpmSlider = document.getElementById("bpm-slider");
-const bpmText = document.getElementById("bpm");
-var T0 = parseInt(((60 / bpmSlider.value) * 1000) / 4);
  
-bpmText.innerHTML = bpmSlider.value + " BPM";
- 
-bpmSlider.oninput = function () {
-    bpmText.innerHTML = this.value + " BPM";
-    T0 = parseInt(((60 / bpmSlider.value) * 1000) / 4);
+.sequencer {
+	display: flex;
+	height: 270px;
+	width: 100%;
+	margin-top: 100px;
 }
  
-// SWING slider
-const swingSlider = document.getElementById("swing-slider");
-const swingText = document.getElementById("swing");
-var swing = 1;
- 
-swingText.innerHTML = "off"
-swingSlider.oninput = function() {
-  if (this.value == 1) {
-    swingText.innerHTML = "off"
-  } else {
-    swingText.innerHTML = "1/"+this.value;
-  }
-  swing = parseFloat(swingSlider.value);
+#p0 {
+	margin-top: 109px;
+	width: 160px;
+	padding-left: 2px;
+	padding-right: 26px;
 }
  
-function playSound(audio) {
-    const source = audioContext.createBufferSource();
-    source.buffer = audio.buffer;
-    source.connect(audioContext.destination);
-    source.start();
+.drum-name {
+	font-weight: bold;
+	font-size: 35px;
+	letter-spacing: 0 px;
+	line-height: 80px;
+	padding: 0px 36px 0px 16px;
+	border-radius: 0px;
+	margin-bottom: 18px;
+	background-color: #fff;
+	color: rgba(0, 0, 0, );
+	box-shadow: -5px 10px 0px rgba(0, 0, 0, 1);
+	border: 4px solid rgba(0, 0, 0, 1);
 }
  
-function highlightRow(i) {
-    document.querySelector(".d" + (i + 1)).childNodes[1].classList.add("row-highlight");
-    document.querySelector(".d" + (i + 1)).childNodes[3].classList.add("row-highlight");
-    document.querySelector(".d" + (i + 1)).childNodes[5].classList.add("row-highlight");
-    document.querySelector(".d" + (i + 1)).childNodes[7].classList.add("row-highlight");
- 
-    if (i > 0) {
-        document.querySelector(".d" + i).childNodes[1].classList.remove("row-highlight");
-        document.querySelector(".d" + i).childNodes[3].classList.remove("row-highlight");
-        document.querySelector(".d" + i).childNodes[5].classList.remove("row-highlight");
-        document.querySelector(".d" + i).childNodes[7].classList.remove("row-highlight");
-    } else {
-        document.querySelector(".d16").childNodes[1].classList.remove("row-highlight");
-        document.querySelector(".d16").childNodes[3].classList.remove("row-highlight");
-        document.querySelector(".d16").childNodes[5].classList.remove("row-highlight");
-        document.querySelector(".d16").childNodes[7].classList.remove("row-highlight");
-    }
+#controls {
+	position: absolute;
+	left: 20px;
+	right: 20px;
+	top: 0px;
+	height: 120px;
 }
  
-function scheduleSounds(currentRow, currentTime) {
-    document.querySelectorAll(".d" + (currentRow + 1)).forEach(function (bruh) {
-        if (bruh.childNodes[1].classList.contains("row-highlight") && bruh.childNodes[1].classList.contains("item-selected")) {
-            playSound(kick);
-        }
- 
-        if (bruh.childNodes[3].classList.contains("row-highlight") && bruh.childNodes[3].classList.contains("item-selected")) {
-            playSound(clap);
-        }
- 
-        if (bruh.childNodes[5].classList.contains("row-highlight") && bruh.childNodes[5].classList.contains("item-selected")) {
-            playSound(hihat);
-        }
- 
-        if (bruh.childNodes[7].classList.contains("row-highlight") && bruh.childNodes[7].classList.contains("item-selected")) {
-            playSound(rim);
-        }
-    });
+#controls-left-side {
+	float: left;
+	height: 100%;
 }
  
-var currentTime = audioContext.currentTime;
-let currentRow = 0;
-let j = 0;
- 
-function loop() {
-    highlightRow(currentRow);
-    scheduleSounds(currentRow, currentTime);
- 
-    let interval = T0 / 1000;
- 
-    j++;
-    if (swing !== 1) {
-        const halfSwing = 0.5*swing;
-        if (j === 1) {
-          interval = 2*T0 * Math.ceil(swing / 2) / swing / 1000;
-        } else {
-          interval = 2*T0 * Math.floor(swing/2)/swing / 1000;             
-          j = 0;
-        }
-    }
-    if (j === 2) {
-      j = 0;
-    }
- 
-    currentTime += interval;
-    currentRow = (currentRow + 1) % rows.length;
- 
-    setTimeout(loop, interval * 1000);
+#controls-right-side {
+	float: right;
+	height: 100%;
 }
  
-// Convert audio to buffer for scheduling
-function convertToBuffer(audioElement, callback) {
-    const request = new XMLHttpRequest();
-    request.open('GET', audioElement.src, true);
-    request.responseType = 'arraybuffer';
-    request.onload = function () {
-        audioContext.decodeAudioData(request.response, function (buffer) {
-            audioElement.buffer = buffer;
-            if (callback) callback();
-        });
-    }
-    request.send();
+.sampler {
+	display: inline;
+	padding: 28px 46px;
+	border-radius: 0px;
+	line-height: 100px;
+	text-align: center;
+	background-color: #fff;
+	color: rgba(0, 0, 0, 0.6);
+	box-shadow: -5px 10px 0px rgba(0, 0, 0, 1);
+	border: 4px solid rgba(0, 0, 0, 1);
+	position: relative;
+  font-size: 35px;
+  color: black;
+  margin-right: 10px;
 }
  
-// Load all audio buffers
-function loadAllBuffers(callback) {
-    let loadedCount = 0;
-    const audioElements = [kick, clap, hihat, rim, Q, W, E, R];
-    audioElements.forEach(audio => {
-        convertToBuffer(audio, () => {
-            loadedCount++;
-            if (loadedCount === audioElements.length) {
-                callback();
-            }
-        });
-    });
+.pressed {
+	box-shadow: -5px 15px 0px rgba(0, 0, 0, 1);
+	top: 2px;
+	background-color: rgba(0, 0, 0, 0);
 }
  
-// Start the loop after all buffers are loaded
-loadAllBuffers(loop);
+#bpm {
+	color: rgba(0, 0, 0);
+	line-height: 120px;
+	position: absolute;
+	top: 25px;
+	right: 450px;
+  font-size: 35px;
+}
+ 
+#bpm-slider {
+	position: absolute;
+	top: 20px;
+	right: 480px;
+	width: 180px;
+  background-color: rgba(0, 0, 0,   0.0);
+  cursor: pointer;
+}
+ 
+#swing {
+	color: rgba(0, 0, 0);
+	line-height: 120px;
+	position: absolute;
+	top: 25px;
+	right: 200px;
+  font-size: 35px;
+}
+ 
+#swing-slider {
+	position: absolute;
+	top: 20px;
+	right: 200px;
+	width: 180px;
+  background-color: rgba(0, 0, 0,   0.0);
+  cursor: pointer;
+}
+ 
+#controls p {
+	display: inline;
+	font-size: 32px;
+	position: relative;
+	top: -4px;
+ 
+}
+ 
+#clear-track {
+	font-weight: bold;
+	color: rgba(0, 0, 0,);
+	padding: 27px 24px;
+	border-radius: 0px;
+	box-shadow: -5px 10px 0px rgba(0, 0, 0, 1);
+	border: 4px solid rgba(0, 0, 0, 1);
+	margin-left: 36px;
+	margin-right: 2px;
+	position: relative;
+  font-size: 35px;
+	-webkit-user-select: none;
+  background-color: white;
+}
+ 
+#clear-track:hover {
+	cursor: pointer;
+	border: 4px solid rgba(0, 0, 0, 1);
+	box-shadow: -52rpx 15px 0px rgba(0, 0, 0, 1);
+  top: 2px;
+}
+ 
+#clear-track:active {
+	top: 0px;
+	box-shadow: -5px 10px 0px rgba(0, 0, 0, 1);
+}
+ 
+ 
+ 
+ 
+ 
+ 
+.d1,
+.d2,
+.d3, 
+.d4,
+.d5,
+.d6,
+.d7,
+.d8,
+.d9,
+.d10,
+.d11,
+.d12,
+.d13,
+.d14,
+.d15,
+.d16
+ 
+{
+	background-color: rgba(0, 0, 0, 0);
+	height: 100%;
+	width: 20%;
+	margin: 5px 2px;
+	display: inline-block;
+ 
+ 
+}
+ 
+.sample {
+	background-color: #B06358;
+	margin: 4px 0px;
+	display: block;
+	height: 100px;
+	border-radius: 6px;
+	border: 0px solid rgba(0, 0, 0,   0);
+	box-sizing: border-box;
+  	border-radius: 8px;
+}
+ 
+.sample:hover {
+	cursor: pointer;
+}
+ 
+.row-highlight {
+	background-color: #4D241F;
+}
+ 
+.item-selected {
+	background-color: #602C29;
+}
+ 
+#d-split {
+	margin-right: 20px;
+ 
+}
+ 
+input[type=range] {
+	height: 50px;
+	-webkit-appearance: none;
+	margin: 10px 0;
+	width: 100%;
+}
+ 
+input[type=range]:focus {
+	outline: none;
+}
+ 
+input[type=range]::-webkit-slider-runnable-track {
+	width: 100%;
+	height: 20px;
+	cursor: pointer;
+	box-shadow: 0px 0px 0px #000000;
+	background: white;
+	border-radius: 0;
+	border: 3px solid black;
+  	box-shadow: -5px 5px 0px rgba(0, 0, 0, 1);
+}
+ 
+input[type=range]::-webkit-slider-thumb {
+	box-shadow: 0px 0px 0px #707070;
+	border: 1px solid #A3A3A3;
+	height: 42px;
+	width: 15px;
+	border-radius: 0 px;
+	background: white;
+	cursor: pointer;
+	-webkit-appearance: none;
+	margin-top: -12px;
+  border: 3px solid black;
+  b
+}
+ 
+input[type=range]:focus::-webkit-slider-runnable-track {
+	background: #EDEDED;
+}
+ 
+input[type=range]::-moz-range-track {
+	width: 100%;
+	height: 7px;
+	cursor: pointer;
+	background: #EDEDED;
+	border-radius: 50px;
+	border: 1px solid #C2C2C2;
+}
+ 
+input[type=range]::-moz-range-thumb {
+	border: 1px solid #A3A3A3;
+	height: 42px;
+	width: 13px;
+	border-radius: 17px;
+	background: #FFFFFF;
+	cursor: pointer;
+}
+ 
+input[type=range]::-ms-track {
+	width: 100%;
+	height: 10px;
+	cursor: pointer;
+	animate: 0.2s;
+	background: transparent;
+	border-color: transparent;
+	color: transparent;
+}
+ 
+input[type=range]::-ms-fill-lower {
+	background: #EDEDED;
+	border: 1px solid #C2C2C2;
+	border-radius: 10px;
+}
+ 
+input[type=range]::-ms-fill-upper {
+	background: #EDEDED;
+	border: 1px solid #C2C2C2;
+	border-radius: 10px;
+}
+ 
+input[type=range]::-ms-thumb {
+	margin-top: 1px;
+	border: 1px solid #A3A3A3;
+	height: 43px;
+	width: 15px;
+	border-radius: 50px;
+	background: #FFFFFF;
+	cursor: pointer;
+}
+ 
+input[type=range]:focus::-ms-fill-lower {
+	background: #EDEDED;
+}
+ 
+input[type=range]:focus::-ms-fill-upper {
+	background: #EDEDED;
+}

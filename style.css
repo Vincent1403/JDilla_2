@@ -170,36 +170,12 @@ html {
 	box-shadow: -5px 10px 0px rgba(0, 0, 0, 1);
 }
  
- 
- 
- 
- 
- 
-.d1,
-.d2,
-.d3, 
-.d4,
-.d5,
-.d6,
-.d7,
-.d8,
-.d9,
-.d10,
-.d11,
-.d12,
-.d13,
-.d14,
-.d15,
-.d16
- 
-{
-	background-color: rgba(0, 0, 0, 0);
+.d1,.d2,.d3,.d4,.d5,.d6,.d7,.d8,.d9,.d10,.d11,.d12,.d13,.d14,.d15,.d16{
+  background-color: rgba(0, 0, 0, 0);
 	height: 100%;
-	width: 20%;
+	width: 25%;
 	margin: 5px 2px;
 	display: inline-block;
- 
- 
 }
  
 .sample {

@@ -193,10 +193,10 @@ function loop() {
         // }
 
         if (j === 2) {
-            interval += 2*T0/swing;
+            interval += 2*T0/swing / 1000;
         }
         if (j === 3) {
-            interval -= 2*T0/swing;
+            interval -= 2*T0/swing / 1000;
         }
 
     }

@@ -17,32 +17,37 @@ const startButton = document.getElementById("start-button");
 const pauseButton = document.getElementById("pause-button");
 
 let isPlaying = false;
-let loopInterval = null;
+let currentStep = 0;
+let loopTimeout = null;
 
 startButton.onclick = function() {
     if (!isPlaying) {
         if (audioContext.state === 'suspended') {
             audioContext.resume();
         }
-        startLoop();
         isPlaying = true;
+        startLoop();
     }
 };
 
 pauseButton.onclick = function() {
-    if (audioContext.state === 'running') {
-        audioContext.suspend();
-        clearInterval(loopInterval);
+    if (isPlaying) {
+        clearTimeout(loopTimeout);
         isPlaying = false;
     }
 };
 
 function startLoop() {
-    let step = 0;
-    loopInterval = setInterval(() => {
-        playStep(step);
-        step = (step + 1) % 16;
-    }, 60000 / document.getElementById("bpm-slider").value / 4);
+    if (isPlaying) {
+        playStep(currentStep);
+        currentStep = (currentStep + 1) % 16;
+        loopTimeout = setTimeout(startLoop, getInterval());
+    }
+}
+
+function getInterval() {
+    const bpm = parseInt(document.getElementById("bpm-slider").value, 10);
+    return (60000 / bpm / 4);
 }
 
 function playStep(step) {
@@ -138,7 +143,7 @@ bpmText.innerHTML = bpmSlider.value + " BPM";
 bpmSlider.oninput = function () {
     bpmText.innerHTML = this.value + " BPM";
     if (isPlaying) {
-        clearInterval(loopInterval);
+        clearTimeout(loopTimeout);
         startLoop();
     }
 }

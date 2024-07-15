@@ -52,9 +52,10 @@ function getInterval() {
 
 function playStep(step) {
     for (let i = 0; i < rows.length; i++) {
-        if (rows[i].children.length > step) {
-            const sample = rows[i].children[step];
-            if (sample && sample.classList.contains("item-selected")) {
+        const row = rows[i];
+        if (row && row.children && row.children.length > step) {
+            const sample = row.children[step];
+            if (sample && sample.classList && sample.classList.contains("item-selected")) {
                 playSound(getSampleAudio(sample.dataset.sample));
             }
         }

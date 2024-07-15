@@ -89,33 +89,41 @@ bpmSlider.oninput = function () {
 const swingSlider = document.getElementById("swing-slider");
 const swingText = document.getElementById("swing");
 var swing = 1;
+
+const firstclasses = ["d1", "d5", "d9", "d13"];
+const first = firstclasses.flatMap(className => Array.from(document.getElementsByClassName(className)));
+const secondclasses = ["d2", "d6", "d10", "d14"];
+const second = secondclasses.flatMap(className => Array.from(document.getElementsByClassName(className)));
+const thirdclasses = ["d3", "d7", "d11", "d15"];
+const third = thirdclasses.flatMap(className => Array.from(document.getElementsByClassName(className)));
+const fourthclasses = ["d4", "d8", "d12", "d16"];
+const fourth = fourthclasses.flatMap(className => Array.from(document.getElementsByClassName(className)));
  
 swingText.innerHTML = "off"
 swingSlider.oninput = function() {
   swing = parseFloat(swingSlider.value);
  
-  const thirdclasses = ["d3", "d7", "d11", "d15"];
-  const third = thirdclasses.flatMap(className => Array.from(document.getElementsByClassName(className)));
-    const fourthclasses = ["d4", "d8", "d12", "d16"];
-  const fourth = fourthclasses.flatMap(className => Array.from(document.getElementsByClassName(className)));
- 
   if (this.value == 1) {
     swingText.innerHTML = "off"
  
     for (var k = 0; k<4;k++) {
+      second[k].style.width="25%";
       third[k].style.width="25%";
-      fourth[k].style.width="25%";
     }
   } else {
     swingText.innerHTML = "1/"+this.value;
  
     for (var k = 0; k<4;k++) {
-      third[k].style.width=50*Math.floor(swing/2)/swing+"%";
-      fourth[k].style.width=50*Math.ceil(swing/2)/swing+"%";
-      console.log(50*Math.floor(swing/2)/swing+"%");
-      console.log(50*Math.ceil(swing/2)/swing+"%");
+      second[k].style.width = 25*(1+1/swing)+"%";
+      third[k].style.width = 25*(1-1/swing)+"%";
+
+      // third[k].style.width=50*Math.floor(swing/2)/swing+"%";
+      // fourth[k].style.width=50*Math.ceil(swing/2)/swing+"%";
+      // console.log(50*Math.floor(swing/2)/swing+"%");
+      // console.log(50*Math.ceil(swing/2)/swing+"%");
     }
   }
+  audioContext.resume();
 }
  
 function playSound(audio) {
@@ -176,13 +184,21 @@ function loop() {
  
     j++;
     if (swing !== 1) {
-        const halfSwing = 0.5*swing;
+        // const halfSwing = 0.5*swing;
+        // if (j === 3) {
+        //   interval = 2*T0 * Math.floor(swing/2)/swing / 1000;             
+        // }
+        // if (j === 4) {
+        //   interval = 2*T0 * Math.ceil(swing / 2) / swing / 1000;
+        // }
+
+        if (j === 2) {
+            interval += 2*T0/swing;
+        }
         if (j === 3) {
-          interval = 2*T0 * Math.floor(swing/2)/swing / 1000;             
+            interval -= 2*T0/swing;
         }
-        if (j === 4) {
-          interval = 2*T0 * Math.ceil(swing / 2) / swing / 1000;
-        }
+
     }
     if (j === 4) {
       j=0;
@@ -221,6 +237,6 @@ function loadAllBuffers(callback) {
         });
     });
 }
- 
+
 // Start the loop after all buffers are loaded
 loadAllBuffers(loop);

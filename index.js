@@ -47,9 +47,12 @@ function startLoop() {
 
 function playStep(step) {
     for (let i = 0; i < rows.length; i++) {
-        const sample = rows[i].children[step];
-        if (sample.classList.contains("item-selected")) {
-            playSound(getSampleAudio(sample.dataset.sample));
+        const row = rows[i];
+        if (row && row.children && row.children[step] && row.children[step].classList) {
+            const sample = row.children[step];
+            if (sample.classList.contains("item-selected")) {
+                playSound(getSampleAudio(sample.dataset.sample));
+            }
         }
     }
 }

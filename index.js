@@ -20,10 +20,10 @@ let isPlaying = false;
 let loopInterval = null;
 
 startButton.onclick = function() {
-    if (audioContext.state === 'suspended') {
-        audioContext.resume();
-    }
     if (!isPlaying) {
+        if (audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
         startLoop();
         isPlaying = true;
     }

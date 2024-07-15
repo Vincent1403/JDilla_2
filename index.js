@@ -12,17 +12,22 @@ const kick = new Audio("https://raw.githubusercontent.com/kucerajacob/DRUM-SEQUE
 
 const item = document.querySelectorAll(".sample");
 
-// Add a user gesture listener to resume the audio context
-document.addEventListener('click', () => {
+// Add Start and Pause button functionality
+const startButton = document.getElementById("start-button");
+const pauseButton = document.getElementById("pause-button");
+
+startButton.onclick = function() {
     if (audioContext.state === 'suspended') {
         audioContext.resume();
     }
-});
-document.addEventListener('keydown', () => {
-    if (audioContext.state === 'suspended') {
-        audioContext.resume();
+    loop();
+};
+
+pauseButton.onclick = function() {
+    if (audioContext.state === 'running') {
+        audioContext.suspend();
     }
-});
+};
 
 // Checkbox toggle functionality
 item.forEach(function (el) {
@@ -207,7 +212,9 @@ function loop() {
     currentTime += interval;
     currentRow = (currentRow + 1) % rows.length;
 
-    setTimeout(loop, interval * 1000);
+    if (audioContext.state === 'running') {
+        setTimeout(loop, interval * 1000);
+    }
 }
 
 // Convert audio to buffer for scheduling
@@ -239,4 +246,8 @@ function loadAllBuffers(callback) {
 }
 
 // Start the loop after all buffers are loaded
-loadAllBuffers(loop);
+loadAllBuffers(() => {
+    startButton.disabled = false;
+});
+
+startButton.disabled = true;
